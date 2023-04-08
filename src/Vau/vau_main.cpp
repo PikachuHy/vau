@@ -213,7 +213,7 @@ TeXmacs_main (int argc, char** argv) {
   bench_cumul ("initialize scheme");
 
   string name ("$TEXMACS_PATH/examples/texts/accent-test.tm");
-  string output ("$HOME/vau-test.ps");
+  string output ("vau-test.ps");
   tm_buffer buf= concrete_buffer_insist (name);
   editor ed (buf);
   
@@ -226,7 +226,7 @@ TeXmacs_main (int argc, char** argv) {
 
 int
 main(int argc, char **argv) {
-  set_env ("TEXMACS_PATH", "/Users/mgubi/t/vau/resources"); //FIXME: CUSTOMIZE!
+  set_env ("TEXMACS_PATH", "/Users/pikachu/pr/vau/resources"); //FIXME: CUSTOMIZE!
   set_env ("TEXMACS_HOME_PATH", "$HOME/.Vau");
   set_env_path ("GUILE_LOAD_PATH", "$TEXMACS_PATH/progs:$GUILE_LOAD_PATH");
 
