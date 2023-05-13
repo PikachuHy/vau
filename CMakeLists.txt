@@ -6,15 +6,16 @@ project (Vau)
 # refer to the root source directory of the project as ${Vau_SOURCE_DIR} and 
 # to the root binary directory of the project as ${Vau_BINARY_DIR}. 
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD 20)
 
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package (PkgConfig REQUIRED)
-pkg_check_modules (Guile REQUIRED guile-1.8 gmp IMPORTED_TARGET)
+# pkg_check_modules (Guile REQUIRED guile-1.8 gmp IMPORTED_TARGET)
 find_package (Freetype REQUIRED)
 find_package (Iconv REQUIRED)
-
+# add_subdirectory(spdlog)
+add_subdirectory(pscm)
 #file(GLOB_RECURSE subdirs LIST_DIRECTORIES true RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/*")
 
 #message(STATUS ${subdirs})
@@ -67,7 +68,8 @@ set (TeXmacs_Include_Dirs
   ${Vau_SOURCE_DIR}/src/Plugins
   ${Vau_SOURCE_DIR}/src/Plugins/Pdf/LibAesgm
   ${Vau_SOURCE_DIR}/src/Scheme
-  ${Vau_SOURCE_DIR}/src/Scheme/Guile
+  # ${Vau_SOURCE_DIR}/src/Scheme/Guile
+  ${Vau_SOURCE_DIR}/src/Scheme/pscm
   ${Vau_SOURCE_DIR}/src/Scheme/Scheme
   ${Vau_SOURCE_DIR}/src/Style/Environment
   ${Vau_SOURCE_DIR}/src/Style/Evaluate
@@ -282,7 +284,8 @@ set (Vau_Base_SRCS
   "${Vau_SOURCE_DIR}/src/Kernel/Types/tab.cpp"
   "${Vau_SOURCE_DIR}/src/Kernel/Types/tree.cpp"
   "${Vau_SOURCE_DIR}/src/Kernel/Types/tree_label.cpp"
-  "${Vau_SOURCE_DIR}/src/Scheme/Guile/guile_tm.cpp"
+  # "${Vau_SOURCE_DIR}/src/Scheme/Guile/guile_tm.cpp"
+  "${Vau_SOURCE_DIR}/src/Scheme/pscm/pscm_tm.cpp"
 #  "${Vau_SOURCE_DIR}/src/Scheme/Scheme/glue.cpp"
   "${Vau_SOURCE_DIR}/src/Scheme/Scheme/object.cpp"
   "${Vau_SOURCE_DIR}/src/System/Boot/preferences.cpp"
@@ -428,10 +431,10 @@ set_target_properties (Vau
         PROPERTIES
         OUTPUT_NAME Vau)
 
-target_link_libraries (Vau PRIVATE PkgConfig::Guile)
+# target_link_libraries (Vau PRIVATE PkgConfig::Guile)
 target_link_libraries (Vau PRIVATE Freetype::Freetype)
 target_link_libraries (Vau PRIVATE Iconv::Iconv)
-
+target_link_libraries(Vau PUBLIC spdlog::spdlog)
 target_sources (Vau PRIVATE ${TeXmacs_All_SRCS})
 
 target_link_libraries (Vau PRIVATE
@@ -448,4 +451,4 @@ target_link_libraries (Vau PRIVATE
         "-framework Foundation"
         "-framework ImageIO"
         )
-
+target_link_libraries(Vau PRIVATE pscm)

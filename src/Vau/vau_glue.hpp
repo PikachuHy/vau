@@ -24,7 +24,7 @@ class glue_function_rep : concrete_struct {
 protected:
   glue_function_rep (const char *_name, FN _fn, int _ar);
   void instantiate () {
-    tmscm_install_procedure (name, fn, arity, 0, 0);
+    // tmscm_install_procedure (name, fn, arity, 0, 0);
   }
 public:
   static void instantiate_all ();
@@ -33,7 +33,7 @@ public:
 
 class glue_function {
   CONCRETE(glue_function);
-  glue_function (glue_function_rep *_rep) : rep(_rep) {}
+  glue_function (glue_function_rep *_rep = nullptr) : rep(_rep) {}
 };
 CONCRETE_CODE(glue_function);
 
@@ -55,7 +55,7 @@ struct tm_glue<void (Ts ...), S0, f> : public glue_function_rep {
   }
   static tmscm func (typename Arg<Ts>::Type ... args) {
     wrap (tmscm_to<Ts> (args) ...);
-    return TMSCM_UNSPECIFIED;
+    return pscm::Cell::none();
   }
   tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, sizeof...(Ts)) {}
 };
@@ -80,7 +80,8 @@ struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
 
 template<typename T0, typename S0, S0 fn> glue_function
 declare_glue (const char *_name) {
-  return tm_new<tm_glue<T0, S0, fn> > (_name);
+  // return tm_new<tm_glue<T0, S0, fn> > (_name);
+  return {};
 }
 
 // to implement unique labels for static variables in DECLARE_GLUE_NAME_TYPE
