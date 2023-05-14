@@ -153,8 +153,8 @@ has_subtree (tree t, path p) {
   return is_compound (t) && i >= 0 && i < N(t) && has_subtree (t[i], p->next);
 }
 
-tree&
-subtree (tree& t, path p) {
+tree
+subtree (tree t, path p) {
   if (is_nil (p)) return t;
   else
     if (N(t) > p->item) return subtree (t[p->item], p->next);
@@ -164,7 +164,7 @@ subtree (tree& t, path p) {
     }
 }
 
-tree&
+tree
 parent_subtree (tree& t, path p) {
   ASSERT (!is_nil (p), "path too short");
   if (is_nil (p->next)) return t;

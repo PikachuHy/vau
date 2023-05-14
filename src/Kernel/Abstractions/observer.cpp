@@ -112,7 +112,7 @@ detach (tree& ref, tree closest, bool right) {
 }
 
 void
-raw_assign (tree& ref, tree t) {
+raw_assign (tree ref, tree t) {
   // cout << "Assign " << ref << " := " << t << "\n";
   modification mod= mod_assign (path (), t);
   if (!is_nil (ref->obs)) {
@@ -132,7 +132,7 @@ raw_assign (tree& ref, tree t) {
 }
 
 void
-raw_insert (tree& ref, int pos, tree t) {
+raw_insert (tree ref, int pos, tree t) {
   // cout << "Insert " << ref << " += " << t << " at " << pos << "\n";
   modification mod= mod_insert (path (), pos, t);
   if (!is_nil (ref->obs))
@@ -157,7 +157,7 @@ raw_insert (tree& ref, int pos, tree t) {
 }
 
 void
-raw_remove (tree& ref, int pos, int nr) {
+raw_remove (tree ref, int pos, int nr) {
   // cout << "Remove " << ref << " -= " << nr << " at " << pos << "\n";
   modification mod= mod_remove (path (), pos, nr);
   if (nr == 0) return;
@@ -190,7 +190,7 @@ raw_remove (tree& ref, int pos, int nr) {
 }
 
 void
-raw_split (tree& ref, int pos, int at) {
+raw_split (tree ref, int pos, int at) {
   // cout << "Split " << ref << " at " << pos << ", " << at << "\n";
   modification mod= mod_split (path (), pos, at);
   if (!is_nil (ref->obs))
@@ -225,7 +225,7 @@ raw_split (tree& ref, int pos, int at) {
 }
 
 void
-raw_join (tree& ref, int pos) {
+raw_join (tree ref, int pos) {
   // cout << "Join " << ref << " at " << pos << "\n";
   // the following code is added for security
   if (is_atomic (ref[pos]) && (!is_atomic (ref[pos+1])))
@@ -261,7 +261,7 @@ raw_join (tree& ref, int pos) {
 }
 
 void
-raw_assign_node (tree& ref, tree_label op) {
+raw_assign_node (tree ref, tree_label op) {
   // cout << "Assign node " << ref << " : " << tree (op) << "\n";
   modification mod= mod_assign_node (path (), op);
   if (!is_nil (ref->obs)) {
@@ -276,7 +276,7 @@ raw_assign_node (tree& ref, tree_label op) {
 }
 
 void
-raw_insert_node (tree& ref, int pos, tree t) {
+raw_insert_node (tree ref, int pos, tree t) {
   // cout << "Insert node " << ref << " : " << t << " at " << pos << "\n";
   modification mod= mod_insert_node (path (), pos, t);
   if (!is_nil (ref->obs)) ref->obs->announce (ref, mod);
@@ -296,7 +296,7 @@ raw_insert_node (tree& ref, int pos, tree t) {
 }
 
 void
-raw_remove_node (tree& ref, int pos) {
+raw_remove_node (tree ref, int pos) {
   // cout << "Remove node " << ref << " : " << pos << "\n";
   modification mod= mod_remove_node (path (), pos);
   if (!is_nil (ref->obs)) {
@@ -314,7 +314,7 @@ raw_remove_node (tree& ref, int pos) {
 }
 
 void
-raw_set_cursor (tree& ref, int pos, tree data) {
+raw_set_cursor (tree ref, int pos, tree data) {
   // cout << "Set cursor " << ref << " : " << pos << ", " << data << "\n";
   modification mod= mod_set_cursor (path (), pos, data);
   if (!is_nil (ref->obs)) {
@@ -328,7 +328,7 @@ raw_set_cursor (tree& ref, int pos, tree data) {
 }
 
 void
-raw_apply (tree& t, modification mod) {
+raw_apply (tree t, modification mod) {
   ASSERT (is_applicable (t, mod), "invalid modification");
   switch (mod->k) {
   case MOD_ASSIGN:
@@ -380,14 +380,14 @@ busy_path (path p) {
 }
 
 bool
-busy_tree (tree& ref) {
+busy_tree (tree ref) {
   path ip= obtain_ip (ref);
   if (ip_attached (ip)) return busy_path (reverse (ip));
   else return true;
 }
 
 void
-apply (tree& ref, modification mod) {
+apply (tree ref, modification mod) {
   if (!is_applicable (ref, mod)) {
     failed_error << "mod= " << mod << "\n";
     failed_error << "ref= " << ref << "\n";
@@ -425,52 +425,52 @@ apply (tree& ref, modification mod) {
 }
 
 void
-assign (tree& ref, tree t) {
+assign (tree ref, tree t) {
   apply (ref, mod_assign (path (), t));
 }
 
 void
-insert (tree& ref, int pos, tree t) {
+insert (tree ref, int pos, tree t) {
   apply (ref, mod_insert (path (), pos, t));
 }
 
 void
-remove (tree& ref, int pos, int nr) {
+remove (tree ref, int pos, int nr) {
   apply (ref, mod_remove (path (), pos, nr));
 }
 
 void
-split (tree& ref, int pos, int at) {
+split (tree ref, int pos, int at) {
   apply (ref, mod_split (path (), pos, at));
 }
 
 void
-join (tree& ref, int pos) {
+join (tree ref, int pos) {
   apply (ref, mod_join (path (), pos));
 }
 
 void
-assign_node (tree& ref, tree_label op) {
+assign_node (tree ref, tree_label op) {
   apply (ref, mod_assign_node (path (), op));
 }
 
 void
-insert_node (tree& ref, int pos, tree t) {
+insert_node (tree ref, int pos, tree t) {
   apply (ref, mod_insert_node (path (), pos, t));
 }
 
 void
-remove_node (tree& ref, int pos) {
+remove_node (tree ref, int pos) {
   apply (ref, mod_remove_node (path (), pos));
 }
 
 void
-set_cursor (tree& ref, int pos, tree data) {
+set_cursor (tree ref, int pos, tree data) {
   apply (ref, mod_set_cursor (path (), pos, data));
 }
 
 void
-touch (tree& ref) {
+touch (tree ref) {
   //cout << "Touch " << ref << "\n";
   if (!is_nil (ref->obs))
     ref->obs->touched (ref, path ());
@@ -497,7 +497,7 @@ remove (path p, int nr) {
 
 void
 split (path p) {
-  tree& st= subtree (the_et, path_up (path_up (p)));
+  tree st= subtree (the_et, path_up (path_up (p)));
   int   l1= last_item (path_up (p));
   int   l2= last_item (p);
   split (st, l1, l2);  

@@ -16,6 +16,7 @@ template<> TYPE tmscm_to<TYPE> (tmscm p) { return tmscm_to_##TYPE (p); }
 
 
 TMSCM_CONVERSION(int)
+TMSCM_CONVERSION(long)
 TMSCM_CONVERSION(double)
 TMSCM_CONVERSION(bool)
 TMSCM_CONVERSION(string)
@@ -582,13 +583,13 @@ modificationP (tmscm t) {
 }
 
 tree
-var_apply (tree& t, modification m) {
+var_apply (tree t, modification m) {
   apply (t, copy (m));
   return t;
 }
 
 tree
-var_clean_apply (tree& t, modification m) {
+var_clean_apply (tree t, modification m) {
   return clean_apply (t, copy (m));
 }
 
@@ -632,7 +633,7 @@ var_clean_apply (tree t, patch p) {
 }
 
 tree
-var_apply (tree& t, patch p) {
+var_apply (tree t, patch p) {
   apply (copy (p), t);
   return t;
 }
@@ -1517,8 +1518,8 @@ DECLARE_GLUE_NAME_TYPE(argument,"modification-argument", int (modification))
 DECLARE_GLUE_NAME_BASE(L,"modification-label", tree_label (modification))
 DECLARE_GLUE_NAME_BASE(copy,"modification-copy", modification (modification))
 DECLARE_GLUE_NAME_BASE(is_applicable,"modification-applicable?", bool (content, modification))
-DECLARE_GLUE_NAME_TYPE_BASE(var_clean_apply,"modification-apply", tree (content, modification), tree (tree&, modification))
-DECLARE_GLUE_NAME_TYPE_BASE(var_apply,"modification-inplace-apply", tree (tree, modification), tree (tree&, modification))
+// DECLARE_GLUE_NAME_TYPE_BASE(var_clean_apply,"modification-apply", tree (content, modification), tree (tree&, modification))
+// DECLARE_GLUE_NAME_TYPE_BASE(var_apply,"modification-inplace-apply", tree (tree, modification), tree (tree&, modification))
 DECLARE_GLUE_NAME_BASE(invert,"modification-invert", modification (modification, content))
 DECLARE_GLUE_NAME_BASE(commute,"modification-commute?", bool (modification, modification))
 DECLARE_GLUE_NAME_BASE(can_pull,"modification-can-pull?", bool (modification, modification))
@@ -1547,7 +1548,7 @@ DECLARE_GLUE_NAME_BASE(get_author,"patch-get-author", double (patch))
 DECLARE_GLUE_NAME_BASE(copy,"patch-copy", patch (patch))
 DECLARE_GLUE_NAME_BASE(is_applicable,"patch-applicable?", bool (patch, content))
 DECLARE_GLUE_NAME_BASE(var_clean_apply,"patch-apply", tree (content, patch))
-DECLARE_GLUE_NAME_TYPE_BASE(var_apply,"patch-inplace-apply", tree (tree, patch), tree (tree&, patch))
+// DECLARE_GLUE_NAME_TYPE_BASE(var_apply,"patch-inplace-apply", tree (tree, patch), tree (tree&, patch))
 DECLARE_GLUE_NAME_TYPE(compactify,"patch-compactify", patch (patch))
 DECLARE_GLUE_NAME_TYPE(cursor_hint,"patch-cursor-hint", path (patch, content))
 DECLARE_GLUE_NAME_BASE(invert,"patch-invert", patch (patch, content))

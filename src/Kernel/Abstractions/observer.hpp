@@ -122,18 +122,18 @@ observer highlight_observer (int lan, array<int> cols);
 
 extern bool busy_modifying;
 extern bool busy_versioning;
-bool busy_tree (tree& ref);
+bool busy_tree (tree ref);
 
-void assign      (tree& ref, tree t);
-void insert      (tree& ref, int pos, tree t);
-void remove      (tree& ref, int pos, int nr);
-void split       (tree& ref, int pos, int at);
-void join        (tree& ref, int pos);
-void assign_node (tree& ref, tree_label op);
-void insert_node (tree& ref, int pos, tree t);
-void remove_node (tree& ref, int pos);
-void set_cursor  (tree& ref, int pos, tree data);
-void touch       (tree& ref);
+void assign      (tree ref, tree t);
+void insert      (tree ref, int pos, tree t);
+void remove      (tree ref, int pos, int nr);
+void split       (tree ref, int pos, int at);
+void join        (tree ref, int pos);
+void assign_node (tree ref, tree_label op);
+void insert_node (tree ref, int pos, tree t);
+void remove_node (tree ref, int pos);
+void set_cursor  (tree ref, int pos, tree data);
+void touch       (tree ref);
 
 void assign      (path p, tree t);
 void insert      (path p, tree ins);
@@ -148,13 +148,13 @@ void touch       (path p);
 
 void insert_observer (observer& o, observer what);
 void remove_observer (observer& o, observer what);
-void attach_observer (tree& ref, observer o);
-void detach_observer (tree& ref, observer o);
-void clean_observers (tree& ref);
+void attach_observer (tree ref, observer o);
+void detach_observer (tree ref, observer o);
+void clean_observers (tree ref);
 
-path obtain_ip (tree& ref);
-void attach_ip (tree& ref, path ip);
-void detach_ip (tree& ref);
+path obtain_ip (tree ref);
+void attach_ip (tree ref, path ip);
+void detach_ip (tree ref);
 bool ip_attached (path ip);
 
 tree obtain_tree (observer o);

@@ -50,7 +50,7 @@ inline path strip (path p, path q) { return p / q; }
 ******************************************************************************/
 
 bool  has_subtree (tree t, path p);
-tree& subtree (tree& t, path p);
-tree& parent_subtree (tree& t, path p);
+tree subtree (tree t, path p);
+tree parent_subtree (tree& t, path p);
 
 #endif // defined PATH_H

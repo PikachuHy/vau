@@ -214,8 +214,8 @@ has_been_visited (string id) {
 * Link event handlers for tree changes
 ******************************************************************************/
 
-tree&
-get_reference (tree& t) {
+tree
+get_reference (tree t) {
   path ip= obtain_ip (t);
   if (ip_attached (ip)) return subtree (the_et, reverse (ip));
   else return t;

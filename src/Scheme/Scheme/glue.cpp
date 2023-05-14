@@ -576,7 +576,7 @@ modificationP (tmscm t) {
 }
 
 tree
-var_apply (tree& t, modification m) {
+var_apply (tree t, modification m) {
   apply (t, copy (m));
   return t;
 }
@@ -624,7 +624,7 @@ var_clean_apply (tree t, patch p) {
 }
 
 tree
-var_apply (tree& t, patch p) {
+var_apply (tree t, patch p) {
   apply (copy (p), t);
   return t;
 }

@@ -1471,7 +1471,7 @@ find_bracket_sub (tree t, dir_t dir, const string& lbr, const string& rbr,
 }
 
 path
-find_left_bracket (path p, const string& lbr, const string& rbr) {
+find_left_bracket (path p, string lbr, string rbr) {
   if (N(lbr) == 0 || N(rbr) == 0 || is_nil (p)) return path();
   const tree& pt = subtree (the_et, path_up (p));
   int pos = reverse(p)->item;
@@ -1482,7 +1482,7 @@ find_left_bracket (path p, const string& lbr, const string& rbr) {
 }
 
 path
-find_right_bracket (path p, const string& lbr, const string& rbr) {
+find_right_bracket (path p, string lbr, string rbr) {
   if (N(lbr) == 0 || N(rbr) == 0 || is_nil (p)) return path();
   const tree& pt = subtree (the_et, path_up (p));
   int pos = reverse(p)->item;

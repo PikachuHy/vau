@@ -33,7 +33,7 @@ void
 tm_buffer_rep::attach_notifier () {
   if (notify) return;
   string id= as_string (buf->name, URL_UNIX);
-  tree& st (subtree (the_et, rp));
+  tree st (subtree (the_et, rp));
   call ("buffer-initialize", id, st, buf->name);
   lns= link_repository (true);
   lns->insert_locus (id, st, "buffer-notify");

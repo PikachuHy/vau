@@ -13,8 +13,8 @@
 #define TREE_MODIFY_H
 #include "drd_std.hpp"
 
-void correct_node (tree& t);
-void correct_downwards (tree& t);
-void correct_upwards (tree& t);
+void correct_node (tree t);
+void correct_downwards (tree t);
+void correct_upwards (tree t);
 
 #endif // defined TREE_MODIFY_H

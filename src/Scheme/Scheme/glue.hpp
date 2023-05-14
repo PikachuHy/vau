@@ -35,6 +35,7 @@ bool tmscm_is_widget (tmscm obj);
 
 tmscm  bool_to_tmscm (bool b);
 tmscm  int_to_tmscm (int i);
+tmscm  long_to_tmscm (long i);
 tmscm  double_to_tmscm (double i);
 tmscm  string_to_tmscm (string s);
 tmscm  symbol_to_tmscm (string s);
@@ -50,6 +51,7 @@ tmscm  scheme_tree_to_tmscm (scheme_tree t);
 
 //int tmscm_to_bool (tmscm obj);
 int tmscm_to_int (tmscm obj);
+long tmscm_to_long (tmscm obj);
 double tmscm_to_double (tmscm  i);
 string tmscm_to_string (tmscm obj);
 string tmscm_to_symbol (tmscm obj);

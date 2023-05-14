@@ -338,6 +338,17 @@ int tmscm_to_int (tmscm obj) {
     return n;
   }
 }
+long tmscm_to_long (tmscm obj) {
+  PSCM_ASSERT(obj.is_num());
+  auto num = obj.to_number();
+  if (num->is_int()) {
+    return num->to_int();
+  }
+  else {
+    long n = num->to_float();
+    return n;
+  }
+}
 double tmscm_to_double (tmscm obj) {
   PSCM_ASSERT(obj.is_num());
   auto num = obj.to_number();

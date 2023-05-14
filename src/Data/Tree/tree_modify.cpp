@@ -55,7 +55,7 @@ correct_concat_node (tree& t, int done) {
 }
 
 void
-correct_node (tree& t) {
+correct_node (tree t) {
   // NOTE: this routine should only modify t and its descendants,
   // but not any ancestors
   if (is_compound (t)) {
@@ -68,7 +68,7 @@ correct_node (tree& t) {
 }
 
 void
-correct_downwards (tree& t) {
+correct_downwards (tree t) {
   if (is_compound (t))
     for (int i=0; i<N(t); i++)
       correct_downwards (t[i]);
@@ -76,7 +76,7 @@ correct_downwards (tree& t) {
 }
 
 void
-correct_upwards (tree& t) {
+correct_upwards (tree t) {
   correct_node (t);
   path ip= obtain_ip (t);
   if (ip_attached (ip) && !is_nil (ip))

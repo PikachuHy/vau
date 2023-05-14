@@ -62,7 +62,7 @@ ip_observer_rep::announce (tree& ref, modification mod) {
   (void) ref;
   //cout << "Announce " << ip << ", " << p << "\n";
   if (!has_parent (ip)) return;
-  tree& parent (subtree (the_et, reverse (ip->next)));
+  tree parent (subtree (the_et, reverse (ip->next)));
   parent->obs->announce (parent, ip->item * mod);
 }
 
@@ -71,7 +71,7 @@ ip_observer_rep::done (tree& ref, modification mod) {
   (void) ref;
   //cout << "Done " << ip << ", " << p << "\n";
   if (!has_parent (ip)) return;
-  tree& parent (subtree (the_et, reverse (ip->next)));
+  tree parent (subtree (the_et, reverse (ip->next)));
   parent->obs->done (parent, ip->item * mod);
 }
 
@@ -80,7 +80,7 @@ ip_observer_rep::touched (tree& ref, path p) {
   (void) ref;
   //cout << "Touched " << ip << ", " << p << "\n";
   if (!has_parent (ip)) return;
-  tree& parent (subtree (the_et, reverse (ip->next)));
+  tree parent (subtree (the_et, reverse (ip->next)));
   parent->obs->touched (parent, path (ip->item, p));
 }
 
@@ -201,7 +201,7 @@ ip_observer_rep::set_ip (path ip2) {
 }
 
 void
-attach_ip (tree& ref, path ip) {
+attach_ip (tree ref, path ip) {
   // cout << "Set ip of " << ref << " to " << ip << "\n";
   if (is_nil (ref->obs) || !ref->obs->set_ip (ip)) {
     // cout << "Create ip observer " << ip << " for " << ref << "\n";
@@ -219,14 +219,14 @@ attach_ip (tree& ref, path ip) {
 }
 
 void
-detach_ip (tree& ref) {
+detach_ip (tree ref) {
   // cout << "Detach ip of " << ref << "\n";
   if (!is_nil (ref->obs))
     (void) ref->obs->set_ip (DETACHED);
 }
 
 path
-obtain_ip (tree& ref) {
+obtain_ip (tree ref) {
   path ip;
   if (is_nil (ref->obs)) return DETACHED;
   if (!ref->obs->get_ip (ip)) return DETACHED;

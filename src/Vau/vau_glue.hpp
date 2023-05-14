@@ -43,12 +43,12 @@ glue_function_rep::glue_function_rep (const char *_name, FN _fn, int _ar)
 }
 
 // adaptor template class
-template<typename T0, typename S0, S0 fn> struct tm_glue  {
+template<typename fn, auto f> struct tm_glue  {
   // we do not provide constructor to detect matching errors
 };
 
-template<typename S0, S0 f, typename ... Ts>
-struct tm_glue<void (Ts ...), S0, f> : public glue_function_rep {
+template<auto f, typename ... Ts>
+struct tm_glue<void (Ts ...), f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   static void wrap (Ts ... args) {
     f (args ...);
@@ -62,8 +62,8 @@ struct tm_glue<void (Ts ...), S0, f> : public glue_function_rep {
 
 class scheme_tree_t;
 
-template<typename S0, S0 f, typename T0, typename ... Ts>
-struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
+template<auto f, typename T0, typename ... Ts>
+struct tm_glue<T0 (Ts ...), f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   template<typename A> struct Res { typedef A Type; };
   template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
@@ -80,8 +80,10 @@ struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
 
 template<typename T0, typename S0, S0 fn> glue_function
 declare_glue (const char *_name) {
-  // return tm_new<tm_glue<T0, S0, fn> > (_name);
-  return {};
+  auto p = tm_new<tm_glue<S0, fn> > (_name);
+  // auto p = new tm_glue<S0, fn>(_name);
+  auto pp = (glue_function_rep*)p;
+  return pp;
 }
 
 // to implement unique labels for static variables in DECLARE_GLUE_NAME_TYPE
