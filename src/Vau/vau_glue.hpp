@@ -9,22 +9,25 @@
 #define VAU_GLUE_H
 
 #include "glue.hpp"
-
+#include <pscm/Function.h>
+#include <pscm/Scheme.h>
 // conversion generics
 template<typename T0> tmscm tmscm_from (T0 out);
 template<typename T0> T0 tmscm_to (SCM in);
 
 class glue_function;
-
+extern pscm::Scheme* scm;
 class glue_function_rep : concrete_struct {
   const char *name;
-  FN fn;
+  pscm::Function::ScmFunc2 fn;
   int arity;
   static list<glue_function> glue_functions;
 protected:
-  glue_function_rep (const char *_name, FN _fn, int _ar);
+  glue_function_rep (const char *_name, pscm::Function::ScmFunc2 _fn, int _ar);
   void instantiate () {
     // tmscm_install_procedure (name, fn, arity, 0, 0);
+    PSCM_ASSERT(scm);
+    scm->add_func(new pscm::Symbol(name), new pscm::Function(name, fn));
   }
 public:
   static void instantiate_all ();
@@ -37,7 +40,7 @@ class glue_function {
 };
 CONCRETE_CODE(glue_function);
 
-glue_function_rep::glue_function_rep (const char *_name, FN _fn, int _ar)
+glue_function_rep::glue_function_rep (const char *_name, pscm::Function::ScmFunc2 _fn, int _ar)
   : name (_name), fn (_fn), arity (_ar) {
   glue_functions= list<glue_function> (this, glue_functions);
 }
@@ -46,37 +49,113 @@ glue_function_rep::glue_function_rep (const char *_name, FN _fn, int _ar)
 template<typename fn, auto f> struct tm_glue  {
   // we do not provide constructor to detect matching errors
 };
+template<auto f, typename ReturnType>
+struct tm_glue<ReturnType(), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+    if constexpr (std::is_void_v<ReturnType>) {
+      f();
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f();
+      return tmscm_from<ReturnType>(ret);
+    }
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
+};
 
-template<auto f, typename ... Ts>
-struct tm_glue<void (Ts ...), f> : public glue_function_rep {
-  template<typename A> struct Arg { typedef tmscm Type; };
-  static void wrap (Ts ... args) {
-    f (args ...);
+template<auto f, typename ReturnType, typename T1>
+struct tm_glue<ReturnType(T1), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+      T1 arg1 = tmscm_to<T1>(car(args));
+    if constexpr (std::is_void_v<ReturnType>) {
+      f(arg1);
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f(arg1);
+      return tmscm_from<ReturnType>(ret);
+    }
   }
-  static tmscm func (typename Arg<Ts>::Type ... args) {
-    wrap (tmscm_to<Ts> (args) ...);
-    return pscm::Cell::none();
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
+};
+
+template<auto f, typename ReturnType, typename T1, typename T2>
+struct tm_glue<ReturnType(T1, T2), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+      T1 arg1 = tmscm_to<T1>(car(args));
+      T2 arg2 = tmscm_to<T2>(cadr(args));
+    if constexpr (std::is_void_v<ReturnType>) {
+      f(arg1, arg2);
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f(arg1, arg2);
+      return tmscm_from<ReturnType>(ret);
+    }
   }
-  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, sizeof...(Ts)) {}
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
+};
+
+template<auto f, typename ReturnType, typename T1, typename T2, typename T3>
+struct tm_glue<ReturnType(T1, T2, T3), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+      T1 arg1 = tmscm_to<T1>(car(args));
+      T2 arg2 = tmscm_to<T2>(cadr(args));
+      T3 arg3 = tmscm_to<T3>(caddr(args));
+    if constexpr (std::is_void_v<ReturnType>) {
+      f(arg1, arg2, arg3);
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f(arg1, arg2, arg3);
+      return tmscm_from<ReturnType>(ret);
+    }
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
+};
+
+template<auto f, typename ReturnType, typename T1, typename T2, typename T3, typename T4>
+struct tm_glue<ReturnType(T1, T2, T3, T4), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+      T1 arg1 = tmscm_to<T1>(car(args));
+      T2 arg2 = tmscm_to<T2>(cadr(args));
+      T3 arg3 = tmscm_to<T3>(caddr(args));
+      T4 arg4 = tmscm_to<T4>(cadddr(args));
+    if constexpr (std::is_void_v<ReturnType>) {
+      f(arg1, arg2, arg3, arg4);
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f(arg1, arg2, arg3, arg4);
+      return tmscm_from<ReturnType>(ret);
+    }
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
+};
+
+template<auto f, typename ReturnType, typename T1, typename T2, typename T3, typename T4, typename T5>
+struct tm_glue<ReturnType(T1, T2, T3, T4, T5), f>: public glue_function_rep {
+  static tmscm func (pscm::Cell args, pscm::SourceLocation loc) {
+      T1 arg1 = tmscm_to<T1>(car(args));
+      T2 arg2 = tmscm_to<T2>(cadr(args));
+      T3 arg3 = tmscm_to<T3>(caddr(args));
+      T4 arg4 = tmscm_to<T4>(cadddr(args));
+      args = cdddr(args);
+      T5 arg5 = tmscm_to<T5>(cadr(args));
+    if constexpr (std::is_void_v<ReturnType>) {
+      f(arg1, arg2, arg3, arg4, arg5);
+      return pscm::Cell::none();
+    }
+    else {
+      ReturnType ret = f(arg1, arg2, arg3, arg4, arg5);
+      return tmscm_from<ReturnType>(ret);
+    }
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, func, 0) {}
 };
 
 class scheme_tree_t;
-
-template<auto f, typename T0, typename ... Ts>
-struct tm_glue<T0 (Ts ...), f> : public glue_function_rep {
-  template<typename A> struct Arg { typedef tmscm Type; };
-  template<typename A> struct Res { typedef A Type; };
-  template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
-
-  static typename Res<T0>::Type wrap (Ts ... args) {
-    return f (args ...);
-  }
-  static tmscm func (typename Arg<Ts>::Type ... args) {
-    T0 out= wrap (tmscm_to<Ts> (args) ...);
-    return tmscm_from<T0> (out);
-  }
-  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, sizeof...(Ts)) {}
-};
 
 template<typename T0, typename S0, S0 fn> glue_function
 declare_glue (const char *_name) {
