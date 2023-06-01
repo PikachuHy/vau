@@ -48,7 +48,6 @@ start_scheme (int argc, char** argv, void (*call_back) (int, char**)) {
 //   gh_enter (argc, argv, call_back);
 // #endif
 // #endif
-  scm = new pscm::Scheme();
   call_back(argc, argv);
 }
 
@@ -114,13 +113,15 @@ eval_scheme_file (string file) {
 #ifndef DEBUG_ON
 static tmscm
 TeXmacs_lazy_eval_string (char *s) {
+  PSCM_THROW_EXCEPTION("not supported now");
   return pscm::Cell::none();
 }
 #endif
 
 static tmscm
 TeXmacs_eval_string (char *s) {
-return pscm::Cell::none();
+  auto ret = scm->eval(s);
+return ret;
 }
 
 tmscm
@@ -242,23 +243,7 @@ call_scheme (SCM fun, array<SCM> a) {
 
 string
 scheme_dialect () {
-#ifdef GUILE_A
-  return "guile-a";
-#else
-#ifdef GUILE_B
-  return "guile-b";
-#else
-#ifdef GUILE_C
-  return "guile-c";
-#else
-#ifdef GUILE_D
-  return "guile-d";
-#else
-  return "unknown";
-#endif
-#endif
-#endif
-#endif
+  return "pscm";
 }
 
 #if (defined(GUILE_C) || defined(GUILE_D))
@@ -383,7 +368,7 @@ tmscm
 symbol_to_tmscm (string s) {
   c_string _s (s);
   auto data = (char*)_s;
-  return new pscm::Symbol(std::string_view(data, N(s)));
+  return new pscm::Symbol(std::string(data, N(s)));
 }
 
 string
@@ -527,10 +512,11 @@ tmscm object_stack;
 
 void
 initialize_scheme () {
+  spdlog::set_level(spdlog::level::err);
   const char* init_prg =
-  "(read-set! keywords 'prefix)\n"
-  "(read-enable 'positions)\n"
-  "(debug-enable 'debug)\n"
+  ";(read-set! keywords 'prefix)\n"
+  ";(read-enable 'positions)\n"
+  ";(debug-enable 'debug)\n"
 #ifdef DEBUG_ON
   "(debug-enable 'backtrace)\n"
 #endif
@@ -545,10 +531,12 @@ initialize_scheme () {
   "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
   "(define object-stack '(()))";
   
+  scm = new pscm::Scheme();
+  scm->eval_all(init_prg);
   // scm_c_eval_string (init_prg);
   // initialize_smobs ();
   initialize_glue ();
-  // object_stack= scm_lookup_string ("object-stack");
+  object_stack= scm->eval("object-stack");
   
     // uncomment to have a guile repl available at startup	
     //	gh_repl(guile_argc, guile_argv);

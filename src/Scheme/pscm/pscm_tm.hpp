@@ -206,8 +206,8 @@ blackbox tmscm_to_blackbox (tmscm obj);
 inline tmscm tmscm_null () { return pscm::nil; }
 inline tmscm tmscm_true () { return pscm::Cell::bool_true(); }
 inline tmscm tmscm_false () { return pscm::Cell::bool_false(); }
-inline void tmscm_set_car (tmscm a, tmscm b) { pscm::set_car(pscm::list(a, b)); }
-inline void tmscm_set_cdr (tmscm a, tmscm b) { pscm::set_cdr(pscm::list(a, b)); }
+inline void tmscm_set_car (tmscm a, tmscm b) { pscm::set_car(a, b); }
+inline void tmscm_set_cdr (tmscm a, tmscm b) { pscm::set_cdr(a, b); }
 	
 	
 inline bool tmscm_is_equal (tmscm o1, tmscm o2) { return pscm::is_equal(pscm::list(o1, o2)).to_bool(); }
