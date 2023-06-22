@@ -11,7 +11,7 @@ set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package (PkgConfig REQUIRED)
-pkg_check_modules (Guile REQUIRED guile-1.8 gmp IMPORTED_TARGET)
+# pkg_check_modules (Guile REQUIRED guile-1.8 gmp IMPORTED_TARGET)
 find_package (Freetype REQUIRED)
 find_package (Iconv REQUIRED)
 set(USE_CPP_STD_COMPAT ON)
