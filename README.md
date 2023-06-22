@@ -4,6 +4,8 @@
 
 the vau can run with pscm now.
 
+see: http://forum.texmacs.cn/t/run-vau-success-with-pscm/1480
+
 That's one small step for TeXmacs, one giant leap for PikachuHy's Scheme (pscm).
 
 ## ScreenShot
