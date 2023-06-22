@@ -28,15 +28,15 @@
       (set-current-error-port cout-port)))
 
 ;;; make eval from guile>=1.6.0 backwards compatible
-(catch 'wrong-number-of-args
-       (lambda () (eval 1))
-       (lambda arg
-	 (let ((default-eval eval))
-	   (set! eval (lambda (form . env)
-			(cond ((null? form) (list))
-			      ((null? env) (primitive-eval form))
-			      (else (default-eval form (car env)))))))))
-
+; (catch 'wrong-number-of-args
+;        (lambda () (eval 1))
+;        (lambda arg
+; 	 (let ((default-eval eval))
+; 	   (set! eval (lambda (form . env)
+; 			(cond ((null? form) (list))
+; 			      ((null? env) (primitive-eval form))
+; 			      (else (default-eval form (car env)))))))))
+(set! eval primitive-eval)
 ;;; for old-style initialization files
 (define-public (exec-file . args)
   (noop))

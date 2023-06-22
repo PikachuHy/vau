@@ -18,14 +18,14 @@
 ;; Lazy exports from other modules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(lazy-define (utils plugins plugin-convert) plugin-supports-math-input-ref)
-(lazy-define (utils plugins plugin-convert) plugin-math-input)
-(lazy-define (utils plugins plugin-cmd) plugin-serializer-set!)
-(lazy-define (utils plugins plugin-cmd) plugin-commander-set!)
-(lazy-define (utils plugins plugin-cmd) plugin-supports-completions?)
-(lazy-define (utils plugins plugin-cmd) plugin-supports-completions-set!)
-(lazy-define (utils plugins plugin-cmd) plugin-supports-input-done?)
-(lazy-define (utils plugins plugin-cmd) plugin-supports-input-done-set!)
+(lazy-define2 (utils plugins plugin-convert) plugin-supports-math-input-ref)
+(lazy-define2 (utils plugins plugin-convert) plugin-math-input)
+(lazy-define2 (utils plugins plugin-cmd) plugin-serializer-set!)
+(lazy-define2 (utils plugins plugin-cmd) plugin-commander-set!)
+(lazy-define2 (utils plugins plugin-cmd) plugin-supports-completions?)
+(lazy-define2 (utils plugins plugin-cmd) plugin-supports-completions-set!)
+(lazy-define2 (utils plugins plugin-cmd) plugin-supports-input-done?)
+(lazy-define2 (utils plugins plugin-cmd) plugin-supports-input-done-set!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Connection types for plugins

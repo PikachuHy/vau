@@ -20,7 +20,7 @@
 (define (guile-b?) (equal? (scheme-dialect) "guile-b"))
 (define (guile-c?) (equal? (scheme-dialect) "guile-c"))
 (define (guile-b-c?) (or (guile-b?) (guile-c?)))
-(if (guile-c?) (use-modules (ice-9 rdelim) (ice-9 pretty-print)))
+; (if (guile-c?) (use-modules (ice-9 rdelim) (ice-9 pretty-print)))
 (define has-look-and-feel? (lambda (x) (== x "emacs")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -61,12 +61,12 @@
 	  (lambda (cmd env)
 	    (apply (lambda ,(cdr head) ,@body) (cdr cmd)))))))
 
-(if (not (guile-a?))
-    (define-macro (define-public-macro head . body)
-      `(begin
-	 (define-macro ,(car head)
-	   (lambda ,(cdr head) ,@body))
-	 (export ,(car head)))))
+; (if (not (guile-a?))
+;     (define-macro (define-public-macro head . body)
+;       `(begin
+; 	 (define-macro ,(car head)
+; 	   (lambda ,(cdr head) ,@body))
+; 	 (export ,(car head)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; On-entry and on-exit macros
@@ -99,21 +99,22 @@
     (begin
       (define import-from use-modules)
       (define re-export export)))
-
-(if (guile-b-c?)
-    (begin
-      (define-macro (import-from . modules)
-	`(process-use-modules
-	  (list ,@(map (lambda (m)
-			 `(list ,@(compile-interface-spec m)))
-		       modules))))
-      ;; FIXME: why does this not work?
-      ;; (define-macro (import-from . modules)
-      ;;   (define (import-from-body module)
-      ;;     `(module-use! (current-module) (resolve-module ',module)))
-      ;;   `(begin
-      ;;     ,@(map import-from-body modules)))
-      ))
+(define import-from use-modules)
+      (define re-export export)
+; (if (guile-b-c?)
+;     (begin
+;       (define-macro (import-from . modules)
+; 	`(process-use-modules
+; 	  (list ,@(map (lambda (m)
+; 			 `(list ,@(compile-interface-spec m)))
+; 		       modules))))
+;       ;; FIXME: why does this not work?
+;       ;; (define-macro (import-from . modules)
+;       ;;   (define (import-from-body module)
+;       ;;     `(module-use! (current-module) (resolve-module ',module)))
+;       ;;   `(begin
+;       ;;     ,@(map import-from-body modules)))
+;       ))
 
 (define-macro (inherit-modules . which-list)
   (define (module-exports which)

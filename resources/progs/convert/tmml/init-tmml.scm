@@ -32,10 +32,10 @@
   (:suffix "tmml")
   (:must-recognize tmml-recognizes?))
 
-(lazy-define (convert tmml tmmltm) parse-tmml)
-(lazy-define (convert tmml tmmlout) serialize-tmml)
-(lazy-define (convert tmml tmmltm) tmml->texmacs)
-(lazy-define (convert tmml tmtmml) texmacs->tmml)
+(lazy-define2 (convert tmml tmmltm) parse-tmml)
+(lazy-define2 (convert tmml tmmlout) serialize-tmml)
+(lazy-define2 (convert tmml tmmltm) tmml->texmacs)
+(lazy-define2 (convert tmml tmtmml) texmacs->tmml)
 
 (converter tmml-document tmml-stree
   (:function parse-tmml))

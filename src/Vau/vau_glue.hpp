@@ -77,7 +77,106 @@ struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
   }
   tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, sizeof...(Ts)) {}
 };
+#if 1
+template<typename S0, S0 f>
+struct tm_glue<void (), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  static void wrap () {
+    f ();
+  }
+  static tmscm func (tmscm args) {
+    wrap ();
+    return TMSCM_UNSPECIFIED;
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 0) {}
+};
 
+class scheme_tree_t;
+
+template<typename S0, S0 f, typename T0>
+struct tm_glue<T0 (), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  template<typename A> struct Res { typedef A Type; };
+  template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
+
+  static typename Res<T0>::Type wrap () {
+    return f ();
+  }
+  static tmscm func (tmscm args) {
+    T0 out= wrap ();
+    return tmscm_from<T0> (out);
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 0) {}
+};
+
+template<typename S0, S0 f, typename T1>
+struct tm_glue<void (T1), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  static void wrap (T1 args) {
+    f (args);
+  }
+  static tmscm func (tmscm args) {
+    auto arg1 = car(args);
+    wrap (tmscm_to<T1> (arg1));
+    return TMSCM_UNSPECIFIED;
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 1) {}
+};
+
+class scheme_tree_t;
+
+template<typename S0, S0 f, typename T0, typename T1>
+struct tm_glue<T0 (T1), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  template<typename A> struct Res { typedef A Type; };
+  template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
+
+  static typename Res<T0>::Type wrap (T1 args) {
+    return f (args);
+  }
+  static tmscm func (tmscm args) {
+    auto arg1 = car(args);
+    T0 out= wrap (tmscm_to<T1> (arg1));
+    return tmscm_from<T0> (out);
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 1) {}
+};
+
+template<typename S0, S0 f, typename T1, typename T2>
+struct tm_glue<void (T1, T2), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  static void wrap (T1 arg1, T2 arg2) {
+    f (arg1, arg2);
+  }
+  static tmscm func (tmscm args) {
+    auto arg1 = car(args);
+    auto arg2 = cadr(args);
+    wrap (tmscm_to<T1> (arg1), tmscm_to<T2>(arg2));
+    return TMSCM_UNSPECIFIED;
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 1) {}
+};
+
+class scheme_tree_t;
+
+template<typename S0, S0 f, typename T0, typename T1, typename T2>
+struct tm_glue<T0 (T1, T2), S0, f> : public glue_function_rep {
+  template<typename A> struct Arg { typedef tmscm Type; };
+  template<typename A> struct Res { typedef A Type; };
+  template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
+
+  static typename Res<T0>::Type wrap (T1 arg1, T2 arg2) {
+    return f (arg1, arg2);
+  }
+  static tmscm func (tmscm args) {
+    auto arg1 = car(args);
+    auto arg2 = cadr(args);
+    T0 out= wrap (tmscm_to<T1> (arg1), tmscm_to<T2>(arg2));
+    return tmscm_from<T0> (out);
+  }
+  tm_glue (const char *_name) : glue_function_rep (_name, (FN)func, 1) {}
+};
+#endif
 template<typename T0, typename S0, S0 fn> glue_function
 declare_glue (const char *_name) {
   return tm_new<tm_glue<T0, S0, fn> > (_name);

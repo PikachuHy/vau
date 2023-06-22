@@ -362,6 +362,11 @@
     `(begin
        ,@(map (lambda (name) (lazy-define-one module opts name)) names))))
 
+;;; hack: pscm not support call-with-values
+(define-public-macro (lazy-define2 module name)
+  (lazy-define-one module '() name)
+)
+
 (define-public (lazy-define-force name)
   (if (procedure? name) (set! name (procedure-name name)))
   (let* ((im (ahash-ref lazy-define-table name))
