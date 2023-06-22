@@ -226,7 +226,8 @@ TeXmacs_main (int argc, char** argv) {
 
 int
 main(int argc, char **argv) {
-  set_env ("TEXMACS_PATH", "/Users/pikachu/pr/vau/resources"); //FIXME: CUSTOMIZE!
+  // set this TEXMACS_PATH before run Vau 
+  // set_env ("TEXMACS_PATH", "/Users/pikachu/pr/vau/resources"); //FIXME: CUSTOMIZE!
   set_env ("TEXMACS_HOME_PATH", "$HOME/.Vau");
   set_env_path ("GUILE_LOAD_PATH", "$TEXMACS_PATH/progs:$GUILE_LOAD_PATH");
 
