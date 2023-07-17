@@ -16,6 +16,7 @@
 #include <pscm/Str.h>
 #include <pscm/Scheme.h>
 #include <pscm/Function.h>
+PSCM_INLINE_LOG_DECLARE("vau.pscm");
 /******************************************************************************
  * Installation of guile and initialization of guile
  ******************************************************************************/
