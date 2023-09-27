@@ -7,3 +7,5 @@ Config.xcconfig
 cmake-build-*
 .idea
 bazel-*
+build.log
+pscm
