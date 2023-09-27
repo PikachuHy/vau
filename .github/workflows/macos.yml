@@ -1,0 +1,63 @@
+name: MacOS
+
+on:
+  push:
+    branches: [ master, vau_pscm]
+  pull_request:
+    branches: [ master, vau_pscm ]
+
+jobs:
+  build_on_macos:
+    runs-on: macos-13
+    strategy:
+      matrix:
+        mode: [ Release, Debug ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Clone Deps
+        run: git submodule update --init
+        working-directory: ${{github.workspace}}
+
+      - name: Install LLVM
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install llvm
+
+      - name: Install Ninja
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install ninja
+
+      - name: Install SDL2
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+      - name: Install icu4c
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install icu4c
+
+      - name: Install vaue deps
+        run: env HOMEBREW_NO_AUTO_UPDATE=1 brew install harfbuzz brotli libpng  
+
+      - name: Clone pscm
+        run: |
+          git clone https://github.com/PikachuHy/pscm.git
+          cd pscm && git submodule update --init
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: CMake-${{ matrix.mode}}
+      - name: Check CMake
+        run: cmake --version
+
+      - name: Configure CMake
+        run: PKG_CONFIG_PATH=/usr/local/opt/icu4c/lib/pkgconfig cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.mode}} -G Ninja -DUSE_CCACHE=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{matrix.mode}} --verbose -j
+
+
+      - name: Upload vau
+        uses: actions/upload-artifact@v3
+        with:
+          name: vau-cmake-${{ matrix.mode}}
+          path: |
+            build/Vau
+
