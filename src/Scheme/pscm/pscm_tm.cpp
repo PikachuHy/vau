@@ -311,7 +311,7 @@ tmscm
 string_to_tmscm (string s) {
   c_string _s (s);
   auto data = (char*)_s;
-  return new pscm::String(std::string(data, N(s)));
+  return new pscm::String(pscm::UString(data, N(s)));
 }
 
 bool tmscm_to_bool (tmscm obj) {
@@ -356,7 +356,9 @@ tmscm_to_string (tmscm s) {
   auto str = s.to_str();
   PSCM_ASSERT(str);
   auto ss = str->str();
-  string r (ss.data(), ss.size());
+  std::string utf8_str;
+  ss.toUTF8String(utf8_str);
+  string r (utf8_str.data(), utf8_str.size());
   return r;
 }
 
@@ -374,7 +376,7 @@ tmscm
 symbol_to_tmscm (string s) {
   c_string _s (s);
   auto data = (char*)_s;
-  return new pscm::Symbol(std::string(data, N(s)));
+  return new pscm::Symbol(pscm::UString(data, N(s)));
 }
 
 string
@@ -383,7 +385,9 @@ tmscm_to_symbol (tmscm s) {
   auto sym = s.to_sym();
   PSCM_ASSERT(sym);
   auto name = sym->name();
-  return string(name.data(), name.size());
+  std::string utf8_str;
+  name.toUTF8String(utf8_str);
+  return string(utf8_str.data(), utf8_str.size());
 }
 
 /******************************************************************************
@@ -518,7 +522,6 @@ tmscm object_stack;
 
 void
 initialize_scheme () {
-  spdlog::set_level(spdlog::level::err);
   const char* init_prg =
   ";(read-set! keywords 'prefix)\n"
   ";(read-enable 'positions)\n"

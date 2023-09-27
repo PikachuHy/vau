@@ -48,7 +48,7 @@ template<typename T0, typename S0, S0 fn> struct tm_glue  {
 };
 
 template<typename S0, S0 f, typename ... Ts>
-struct tm_glue<void (Ts ...), S0, f> : public glue_function_rep {
+struct tm_glue<void (*) (Ts ...), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   static void wrap (Ts ... args) {
     f (args ...);
@@ -63,7 +63,7 @@ struct tm_glue<void (Ts ...), S0, f> : public glue_function_rep {
 class scheme_tree_t;
 
 template<typename S0, S0 f, typename T0, typename ... Ts>
-struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
+struct tm_glue<T0 (*) (Ts ...), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   template<typename A> struct Res { typedef A Type; };
   template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
@@ -79,7 +79,7 @@ struct tm_glue<T0 (Ts ...), S0, f> : public glue_function_rep {
 };
 #if 1
 template<typename S0, S0 f>
-struct tm_glue<void (), S0, f> : public glue_function_rep {
+struct tm_glue<void (*) (), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   static void wrap () {
     f ();
@@ -94,7 +94,7 @@ struct tm_glue<void (), S0, f> : public glue_function_rep {
 class scheme_tree_t;
 
 template<typename S0, S0 f, typename T0>
-struct tm_glue<T0 (), S0, f> : public glue_function_rep {
+struct tm_glue<T0 (*) (), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   template<typename A> struct Res { typedef A Type; };
   template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
@@ -110,7 +110,7 @@ struct tm_glue<T0 (), S0, f> : public glue_function_rep {
 };
 
 template<typename S0, S0 f, typename T1>
-struct tm_glue<void (T1), S0, f> : public glue_function_rep {
+struct tm_glue<void (*) (T1), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   static void wrap (T1 args) {
     f (args);
@@ -126,7 +126,7 @@ struct tm_glue<void (T1), S0, f> : public glue_function_rep {
 class scheme_tree_t;
 
 template<typename S0, S0 f, typename T0, typename T1>
-struct tm_glue<T0 (T1), S0, f> : public glue_function_rep {
+struct tm_glue<T0 (*) (T1), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   template<typename A> struct Res { typedef A Type; };
   template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
@@ -143,7 +143,7 @@ struct tm_glue<T0 (T1), S0, f> : public glue_function_rep {
 };
 
 template<typename S0, S0 f, typename T1, typename T2>
-struct tm_glue<void (T1, T2), S0, f> : public glue_function_rep {
+struct tm_glue<void (*) (T1, T2), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   static void wrap (T1 arg1, T2 arg2) {
     f (arg1, arg2);
@@ -160,7 +160,7 @@ struct tm_glue<void (T1, T2), S0, f> : public glue_function_rep {
 class scheme_tree_t;
 
 template<typename S0, S0 f, typename T0, typename T1, typename T2>
-struct tm_glue<T0 (T1, T2), S0, f> : public glue_function_rep {
+struct tm_glue<T0 (*) (T1, T2), S0, f> : public glue_function_rep {
   template<typename A> struct Arg { typedef tmscm Type; };
   template<typename A> struct Res { typedef A Type; };
   template<> struct Res<scheme_tree_t> { typedef scheme_tree Type; };
@@ -189,7 +189,9 @@ declare_glue (const char *_name) {
 // declarations macros
 #define DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, BASE) \
   glue_function DECLARE_GLUE_CONCAT(glue_decl_##FUNC,__COUNTER__) (declare_glue<TYPE, BASE, FUNC> (NAME));
-#define DECLARE_GLUE_NAME_TYPE(FUNC, NAME, TYPE) DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, decltype(FUNC))
+#define DECLARE_GLUE_NAME_TYPE(FUNC, NAME, TYPE) DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, TYPE)
+#define DECLARE_GLUE_NAME_TYPE2(FUNC, NAME, TYPE) DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, decltype(FUNC))
+// #define DECLARE_GLUE_NAME_TYPE2(FUNC, NAME, TYPE,  BASE) DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, decltype(FUNC))
 #define DECLARE_GLUE_NAME_BASE(FUNC, NAME, TYPE) DECLARE_GLUE_NAME_TYPE_BASE(FUNC, NAME, TYPE, TYPE)
 #define DECLARE_GLUE_NAME(FUNC, NAME) DECLARE_GLUE_NAME_TYPE(FUNC, NAME, decltype(FUNC))
 #define DECLARE_GLUE(FUNC) DECLARE_GLUE_NAME(FUNC, #FUNC)
