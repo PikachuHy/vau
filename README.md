@@ -59,6 +59,23 @@ then `vau-test.ps` file generated
 ps2pdf vau-test.ps
 ```
 
+## Build with bazel
+
+
+
+Install deps
+
+currently, these deps are not built by bazel
+
+```
+brew install harfbuzz brotli libpng
+```
+
+run 
+```
+TEXMACS_PATH=/path/to/vau/resources PSCM_LOAD_PATH=/path/to/vau/resources/progs ./bazel-bin/src/vau
+```
+
 
 
 ## Note

@@ -1,0 +1,31 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+filegroup(
+    name = "srcs",
+    srcs = glob([
+        "include/**",
+        "src/**",
+        "subprojects/**",
+        "tests/**",
+        "objs/**",
+        "builds/**",
+        "devel/**",
+    ]) + [
+        "autogen.sh",
+        "Makefile",
+        "configure",
+        "modules.cfg",
+        "vms_make.com",
+        "CMakeLists.txt",
+        "README",
+        "README.git",
+        "LICENSE.TXT",
+    ],
+)
+
+cmake(
+    name = "freetype",
+    lib_source = ":srcs",
+    out_static_libs = ["libfreetype.a"],
+    visibility = ["//visibility:public"],
+)

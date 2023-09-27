@@ -1,0 +1,123 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
+
+git_repository(
+    name = "dev_pscm",
+    commit = "5e6dfaad830e9cd3e824dfc98de3523d47f54c8d",
+    remote = "https://github.com/PikachuHy/pscm.git",
+)
+
+new_git_repository(
+    name = "cpp-linenoise",
+    build_file = "@dev_pscm//3rd:cpp-linenoise.bazel",
+    commit = "4cd89adfbc07cedada1aa32be12991828919d91b",
+    remote = "https://github.com/yhirose/cpp-linenoise.git",
+)
+
+new_git_repository(
+    name = "ust",
+    build_file = "@dev_pscm//3rd:ust.bazel",
+    commit = "28f5230d75e677ce8e4e140b2f3e0b8550195c85",
+    remote = "https://github.com/MisterTea/UniversalStacktrace.git",
+)
+
+new_git_repository(
+    name = "string-view-lite",
+    build_file = "@dev_pscm//3rd:string-view-lite.bazel",
+    commit = "5b1d95fe2c0ee18e654876487898b9a423a954db",
+    remote = "https://github.com/martinmoene/string-view-lite.git",
+)
+
+new_git_repository(
+    name = "variant",
+    build_file = "@dev_pscm//3rd:variant.bazel",
+    commit = "23cb94f027d4ef33bf48133acc2695c7e5c6f1e7",
+    remote = "https://github.com/mpark/variant.git",
+)
+
+new_git_repository(
+    name = "optional",
+    build_file = "@dev_pscm//3rd:optional.bazel",
+    commit = "3a1209de8370bf5fe16362934956144b49591565",
+    remote = "https://github.com/TartanLlama/optional.git",
+)
+
+new_git_repository(
+    name = "filesystem",
+    build_file = "@dev_pscm//3rd:filesystem.bazel",
+    commit = "72a76d774e4c7c605141fd6d11c33cc211209ed9",
+    remote = "https://github.com/gulrak/filesystem.git",
+)
+
+new_git_repository(
+    name = "mscharconv",
+    build_file = "@dev_pscm//3rd:mscharconv.bazel",
+    commit = "5d2e3a6e9663a41207561c9510ad1e3d557b5c5e",
+    remote = "https://github.com/iboB/mscharconv.git",
+)
+
+http_archive(
+    name = "doctest",
+    sha256 = "6745e17682d6e2be1ea31ec8bf1814a3d7cb17d61d120e5f2ee5a075926634ad",
+    strip_prefix = "doctest-2.4.11",
+    url = "https://github.com/doctest/doctest/archive/refs/tags/v2.4.11.zip",
+)
+
+http_archive(
+    name = "spdlog",
+    build_file = "@dev_pscm//:spdlog.bazel",
+    sha256 = "33f83c6b86ec0fbbd0eb0f4e980da6767494dc0ad063900bcfae8bc3e9c75f21",
+    strip_prefix = "spdlog-1.11.0",
+    urls = [
+        "https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.zip",
+    ],
+)
+
+git_repository(
+    name = "icu",
+    commit = "1c1933fa1ebadd6954fe9eff18e8bb0d018594ff",
+    remote = "https://github.com/PikachuHy/icu.bazel.git",
+)
+
+http_archive(
+    name = "emsdk",
+    sha256 = "bbea764c57af830e761f1fb8600d42dc303aa63ffd43647694eda5b8b757b469",
+    strip_prefix = "emsdk-3.1.35/bazel",
+    url = "https://github.com/emscripten-core/emsdk/archive/refs/tags/3.1.35.tar.gz",
+)
+
+load("@emsdk//:deps.bzl", emsdk_deps = "deps")
+
+emsdk_deps()
+
+load("@emsdk//:emscripten_deps.bzl", emsdk_emscripten_deps = "emscripten_deps")
+
+emsdk_emscripten_deps(emscripten_version = "3.1.35")
+
+load("@emsdk//:toolchains.bzl", "register_emscripten_toolchains")
+
+register_emscripten_toolchains()
+
+http_archive(
+    name = "rules_foreign_cc",
+    # TODO: Get the latest sha256 value from a bazel debug message or the latest
+    #       release on the releases page: https://github.com/bazelbuild/rules_foreign_cc/releases
+    #
+    # sha256 = "...",
+    strip_prefix = "rules_foreign_cc-60813d57a0e99be1a009c1a0e9627cdbe81fcd19",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/60813d57a0e99be1a009c1a0e9627cdbe81fcd19.tar.gz",
+)
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
+rules_foreign_cc_dependencies()
+
+http_archive(
+    name = "freetype",
+    build_file = "@//:freetype.bazel",
+    sha256 = "12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d",
+    strip_prefix = "freetype-2.13.2",
+    urls = [
+        "https://nchc.dl.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz",
+    ],
+)
