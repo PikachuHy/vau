@@ -121,3 +121,13 @@ http_archive(
         "https://nchc.dl.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz",
     ],
 )
+
+http_archive(
+    name = "libpng",
+    build_file = "@//:libpng.bazel",
+    sha256 = "62d25af25e636454b005c93cae51ddcd5383c40fa14aa3dae8f6576feb5692c2",
+    strip_prefix = "libpng-1.6.40",
+    urls = [
+        "https://github.com/glennrp/libpng/archive/refs/tags/v1.6.40.tar.gz",
+    ],
+)
