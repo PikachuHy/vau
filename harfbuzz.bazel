@@ -1,0 +1,14 @@
+load("@rules_foreign_cc//foreign_cc:meson.bzl", "meson")
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"])
+)
+
+meson(
+    name = "harfbuzz",
+    options = {"default_library": "static"},
+    lib_source = ":srcs",
+    out_static_libs = ["libharfbuzz.a"],
+    visibility = ["//visibility:public"],
+)

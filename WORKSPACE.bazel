@@ -141,3 +141,13 @@ http_archive(
         "https://github.com/google/brotli/archive/refs/tags/v1.1.0.tar.gz",
     ],
 )
+
+http_archive(
+    name = "harfbuzz",
+    build_file = "@//:harfbuzz.bazel",
+    sha256 = "0fec78f98c9c8faf228957a201c8846f809452c20f8445eb092a1ba6f22dbea5",
+    strip_prefix = "harfbuzz-8.2.1",
+    urls = [
+        "https://github.com/harfbuzz/harfbuzz/releases/download/8.2.1/harfbuzz-8.2.1.tar.xz",
+    ],
+)
