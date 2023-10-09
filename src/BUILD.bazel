@@ -365,13 +365,12 @@ cc_binary(
         "-L /usr/local/opt/harfbuzz/lib",
         "-lharfbuzz",
         "-liconv",
-        "-L /usr/local/opt/brotli/lib",
-        "-lbrotlidec",
         "-lbz2",
     ],
     deps = [
         ":plugin",
         ":vau_pscm",
+        "@brotli",
         "@libpng"
     ],
 )
